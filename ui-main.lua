@@ -1,6 +1,6 @@
 local Library = {}
 
-local NeverloseVersion = "v2.0"
+local NeverloseVersion = "v1.1A."
 
 local TweenService = game:GetService("TweenService")
 local input = game:GetService("UserInputService")
@@ -65,27 +65,33 @@ local function round(num, bracket)
     return a
 end
 
-local function fadeUI(uiElement, targetTransparency, callback)
-    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local targetProperties = {BackgroundTransparency = targetTransparency}
-    local tween = TweenService:Create(uiElement, tweenInfo, targetProperties)
-    
-    tween:Play()
-    tween.Completed:Connect(callback)
-end
-
 local function toggleUI()
-    local uiElement = game.CoreGui:FindFirstChild("Neverlose")
-    if uiElement then
-        local targetTransparency = uiElement.Enabled and 1 or 0
-        fadeUI(uiElement, targetTransparency, function()
-            uiElement.Enabled = not uiElement.Enabled
-        end)
+    if game.CoreGui:FindFirstChild("Neverlose") then
+        local enabled = game.CoreGui.Neverlose.Enabled
+        game.CoreGui.Neverlose.Enabled = not enabled
     end
 end
 
+input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
+    if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
+        toggleUI()
+    end
+end)
 
-UserInputService.InputBegan:Connect(function(inputObject, gameProcessedEvent)
+
+
+input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
+    if not gameProcessedEvent then
+        if inputObject.KeyCode == Enum.KeyCode.RightShift then
+            toggleUI()
+        elseif inputObject.KeyCode == Enum.KeyCode.RightAlt then
+            unloadUI()
+        end
+    end
+end)
+
+
+input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
         toggleUI()
     end
