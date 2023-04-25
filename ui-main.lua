@@ -103,7 +103,7 @@ input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
 end)
 
 
-input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
+UserInputService.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
         toggleUI()
     end
