@@ -1,6 +1,6 @@
 local Library = {}
 
-local NeverloseVersion = "v1.1A."
+local NeverloseVersion = "v2.0"
 
 local TweenService = game:GetService("TweenService")
 local input = game:GetService("UserInputService")
@@ -65,12 +65,24 @@ local function round(num, bracket)
     return a
 end
 
+local function fadeUI(uiElement, targetTransparency)
+    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local targetProperties = {BackgroundTransparency = targetTransparency}
+    local tween = TweenService:Create(uiElement, tweenInfo, targetProperties)
+    
+    tween:Play()
+end
+
+
 local function toggleUI()
-    if game.CoreGui:FindFirstChild("Neverlose") then
-        local enabled = game.CoreGui.Neverlose.Enabled
-        game.CoreGui.Neverlose.Enabled = not enabled
+    local uiElement = game.CoreGui:FindFirstChild("Neverlose")
+    if uiElement then
+        local targetTransparency = uiElement.Enabled and 1 or 0
+        fadeUI(uiElement, targetTransparency)
+        uiElement.Enabled = not uiElement.Enabled
     end
 end
+
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
