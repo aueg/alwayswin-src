@@ -65,32 +65,30 @@ local function round(num, bracket)
     return a
 end
 
-local function fadeUI(uiElement, targetTransparency)
+local function fadeUI(uiElement, targetTransparency, callback)
     local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local targetProperties = {BackgroundTransparency = targetTransparency}
     local tween = TweenService:Create(uiElement, tweenInfo, targetProperties)
     
     tween:Play()
+    tween.Completed:Connect(callback)
 end
-
 
 local function toggleUI()
     local uiElement = game.CoreGui:FindFirstChild("Neverlose")
     if uiElement then
         local targetTransparency = uiElement.Enabled and 1 or 0
-        fadeUI(uiElement, targetTransparency)
-        uiElement.Enabled = not uiElement.Enabled
+        fadeUI(uiElement, targetTransparency, function()
+            uiElement.Enabled = not uiElement.Enabled
+        end)
     end
 end
-
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
         toggleUI()
     end
 end)
-
-
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if not gameProcessedEvent then
