@@ -65,12 +65,34 @@ local function round(num, bracket)
     return a
 end
 
+local function fadeIn(gui, duration)
+    duration = duration or 0.5
+    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
+    local tween = TweenService:Create(gui, tweenInfo, { BackgroundTransparency = 0 })
+    tween:Play()
+end
+
+local function fadeOut(gui, duration)
+    duration = duration or 0.5
+    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+    local tween = TweenService:Create(gui, tweenInfo, { BackgroundTransparency = 1 })
+    tween:Play()
+end
+
+
 local function toggleUI()
     if game.CoreGui:FindFirstChild("Neverlose") then
         local enabled = game.CoreGui.Neverlose.Enabled
+        if enabled then
+            fadeOut(game.CoreGui.Neverlose, 0.5)
+            wait(0.5)
+        else
+            fadeIn(game.CoreGui.Neverlose, 0.5)
+        end
         game.CoreGui.Neverlose.Enabled = not enabled
     end
 end
+
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
