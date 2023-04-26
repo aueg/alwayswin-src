@@ -65,36 +65,39 @@ local function round(num, bracket)
     return a
 end
 
-local function setAllTransparency(gui, transparency)
+local function fadeElements(gui, targetTransparency, duration)
     for _, v in ipairs(gui:GetDescendants()) do
-        if v:IsA("Frame") or v:IsA("TextLabel") or v:IsA("TextButton") then
-            v.BackgroundTransparency = transparency
+        if v:IsA("TextButton") then
+            local tween = TweenService:Create(v, TweenInfo.new(duration, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                BackgroundTransparency = targetTransparency
+            })
+            tween:Play()
         end
     end
 end
 
 local function fadeIn(gui, duration)
-    duration = duration or 0.5
+    duration = duration or 0.06
     gui.Visible = true
-    for i = 0, duration, 0.1 do
-        setAllTransparency(gui, 1 - i / duration)
-        wait(0.1)
-    end
+    fadeElements(gui, 0, duration)
 end
 
 local function fadeOut(gui, duration)
-    duration = duration or 0.5
-    for i = 0, duration, 0.1 do
-        setAllTransparency(gui, i / duration)
-        wait(0.1)
-    end
+    duration = duration or 0.06
+    fadeElements(gui, 1, duration)
+    wait(duration)
     gui.Visible = false
 end
 
 local function toggleUI()
     local neverloseGui = game.CoreGui:FindFirstChild("Neverlose")
     if neverloseGui then
-        neverloseGui.Visible = not neverloseGui.Visible
+        local enabled = neverloseGui.Visible
+        if enabled then
+            fadeOut(neverloseGui, 0.06)
+        else
+            fadeIn(neverloseGui, 0.06)
+        end
     end
 end
 
