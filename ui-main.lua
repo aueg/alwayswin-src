@@ -131,14 +131,14 @@ local function buttoneffect(options)
     pcall(function()
         options.entered.MouseEnter:Connect(function()
             if options.frame.TextColor3 ~= Color3.fromRGB(234, 239, 246) then
-                TweenService:Create(options.frame, TweenInfo.new(0.06, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                TweenService:Create(options.frame, TweenInfo.new(1.06, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
                     TextColor3 = Color3.fromRGB(234, 239, 245)
                 }):Play()
             end
         end)
         options.entered.MouseLeave:Connect(function()
             if options.frame.TextColor3 ~= Color3.fromRGB(157, 171, 182) and options.frame.TextColor3 ~= Color3.fromRGB(234, 239, 246) then
-                TweenService:Create(options.frame, TweenInfo.new(0.06, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                TweenService:Create(options.frame, TweenInfo.new(1.06, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
                     TextColor3 = Color3.fromRGB(157, 171, 182)
                 }):Play()
             end
