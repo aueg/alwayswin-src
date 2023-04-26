@@ -65,24 +65,30 @@ local function round(num, bracket)
     return a
 end
 
+local function setAllTransparency(gui, transparency)
+    for _, v in ipairs(gui:GetDescendants()) do
+        if v:IsA("Frame") or v:IsA("TextLabel") or v:IsA("TextButton") then
+            v.BackgroundTransparency = transparency
+        end
+    end
+end
+
 local function fadeIn(gui, duration)
     duration = duration or 0.5
     gui.Visible = true
-    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
-    local tween = TweenService:Create(gui, tweenInfo, { BackgroundTransparency = 0 })
-    tween:Play()
+    for i = 0, duration, 0.1 do
+        setAllTransparency(gui, 1 - i / duration)
+        wait(0.1)
+    end
 end
 
-local function fadeOut(gui, duration, callback)
+local function fadeOut(gui, duration)
     duration = duration or 0.5
-    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-    local tween = TweenService:Create(gui, tweenInfo, { BackgroundTransparency = 1 })
-    tween:Play()
-    tween.Completed:Wait()
-    gui.Visible = false
-    if callback then
-        callback()
+    for i = 0, duration, 0.1 do
+        setAllTransparency(gui, i / duration)
+        wait(0.1)
     end
+    gui.Visible = false
 end
 
 local function toggleUI()
@@ -96,8 +102,6 @@ local function toggleUI()
         end
     end
 end
-
-
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
