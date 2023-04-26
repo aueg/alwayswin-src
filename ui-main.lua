@@ -67,31 +67,36 @@ end
 
 local function fadeIn(gui, duration)
     duration = duration or 0.5
+    gui.Visible = true
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
     local tween = TweenService:Create(gui, tweenInfo, { BackgroundTransparency = 0 })
     tween:Play()
 end
 
-local function fadeOut(gui, duration)
+local function fadeOut(gui, duration, callback)
     duration = duration or 0.5
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
     local tween = TweenService:Create(gui, tweenInfo, { BackgroundTransparency = 1 })
     tween:Play()
-end
-
-
-local function toggleUI()
-    if game.CoreGui:FindFirstChild("Neverlose") then
-        local enabled = game.CoreGui.Neverlose.Enabled
-        if enabled then
-            fadeOut(game.CoreGui.Neverlose, 0.5)
-            wait(0.5)
-        else
-            fadeIn(game.CoreGui.Neverlose, 0.5)
-        end
-        game.CoreGui.Neverlose.Enabled = not enabled
+    tween.Completed:Wait()
+    gui.Visible = false
+    if callback then
+        callback()
     end
 end
+
+local function toggleUI()
+    local neverloseGui = game.CoreGui:FindFirstChild("Neverlose")
+    if neverloseGui then
+        local enabled = neverloseGui.Visible
+        if enabled then
+            fadeOut(neverloseGui, 0.5)
+        else
+            fadeIn(neverloseGui, 0.5)
+        end
+    end
+end
+
 
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
