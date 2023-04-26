@@ -94,14 +94,10 @@ end
 local function toggleUI()
     local neverloseGui = game.CoreGui:FindFirstChild("Neverlose")
     if neverloseGui then
-        local enabled = neverloseGui.Visible
-        if enabled then
-            fadeOut(neverloseGui, 0.5)
-        else
-            fadeIn(neverloseGui, 0.5)
-        end
+        neverloseGui.Visible = not neverloseGui.Visible
     end
 end
+
 
 input.InputBegan:Connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.RightShift and not gameProcessedEvent then
